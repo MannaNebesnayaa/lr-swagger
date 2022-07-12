@@ -93,13 +93,13 @@ paths:
     post:
       security: []
       summary: Повторная отправка смс с кодом
-      description: Запрос на отправку смс на введенный номер. Запрос аналогичен авторизации.
+      description: Запрос на отправку смс на введенный номер.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "models.yaml#/components/schemas/AuthCodeRequest"
+              $ref: "models.yaml#/components/schemas/AuthSignedData"
       responses:
         "200":
           description: Положительный ответ
