@@ -1,0 +1,46 @@
+components:
+  schemas:
+
+    ApiErrorResponse:
+        description: >
+          Http StatusCode = 500
+          Ошибка, произошедшая из-за неправильных данных в Request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CommonError"
+
+    CommonError:
+      description: >
+        Содержит себе всю информацию о произошедшей в логике на сервере ошибке,
+        полный список ошибок описан в /common/api.yaml
+      type: object
+      properties:
+        errors: 
+          type: integer
+          description: >
+            Это идентификатор ошибки.
+            Этот идентификатор мобильное приложение будет использовать для того, чтобы включать определенное поведение.
+        messages:
+          $ref: "#/components/schemas/MessagesInfo"
+          
+    MessagesInfo:
+      type: object
+      properties:
+        message:    
+          type: string
+          description: Данные для реакции приложения на ошибку/ответ
+          example: "Вам отправлен код подтверждения"
+        code:
+          type: string
+          description: >
+            Сообщение, которое возможно будет показано на UI,
+            либо будет использовано только для информирования разработчиков
+          example: "USER_ALREADY_REGISTERED_SMS_SEND"
+        customData:
+          type: string
+          nullable: true
+          example: ""
+      required:
+        - message
+        - code

@@ -7,19 +7,105 @@ info:
     email: vlasov-a@surf.dev
 
 servers:
-  - url: https://someaddress.com
-    description: TODO заглушка, требуется поправить в будущем на реальный адрес. 
+  - url: https://apitest.loverepublic.ru
+    description: Тестовый контур LR
+  - url: https://api.loverepublic.ru
+    description: Продовый контур LR
 
 components:
   securitySchemes:
-    AuthApiKey:
-      description: Ключ авторизованного пользователя
+    Authorization:
+      description: Токен сессии
       type: apiKey
       in: header
       name: Authorization  
 
 
 security:
-  - AuthApiKey: []
+  - Authorization: [Bearer 2d787a3937383c275d3831de97de6e4bbc270ee09694dcef3fd6a0c90e02b8d3]
 
 paths:
+
+  /app/user/auth/phone:
+    post:
+      security: []
+      summary: Авторизация в приложении, получение смс с кодом
+      description: Запрос на отправку смс на введенный номер
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "models.yaml#/components/schemas/AuthCodeRequest"
+      responses:
+        "200":
+          description: Положительный ответ
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/AuthCodeResponse"
+        "500":
+          $ref: "../common/errors.yaml#/components/schemas/CommonError"
+  
+  /app/user/register/phone:
+    post:
+      security: []
+      summary: Регистрация в приложении, получение смс с кодом
+      description: Запрос на отправку смс на введенный номер. Запрос аналогичен авторизации.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "models.yaml#/components/schemas/AuthCodeRequest"
+      responses:
+        "200":
+          description: Положительный ответ
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/AuthCodeResponse"
+        "500":
+          $ref: "../common/errors.yaml#/components/schemas/CommonError"
+
+  /app/user/phone/confirm:
+    post:
+      security: []
+      summary: Подтверждение номера телефона
+      description: Проверка правильности введенного кода из смс
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "models.yaml#/components/schemas/AuthCodeVerifyRequest"
+      responses:
+        "200":
+          description: Положительный ответ
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/AuthCodeVerifyResponse"
+        "500":
+          $ref: "../common/errors.yaml#/components/schemas/CommonError"
+
+  /app/user/phone/resend:
+    post:
+      security: []
+      summary: Повторная отправка смс с кодом
+      description: Запрос на отправку смс на введенный номер. Запрос аналогичен авторизации.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "models.yaml#/components/schemas/AuthCodeRequest"
+      responses:
+        "200":
+          description: Положительный ответ
+          content:
+            application/json:
+              schema:
+                $ref: "models.yaml#/components/schemas/AuthCodeResponse"
+        "500":
+          $ref: "../common/errors.yaml#/components/schemas/CommonError"

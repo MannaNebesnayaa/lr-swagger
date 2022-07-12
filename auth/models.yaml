@@ -1,2 +1,109 @@
 components:
   schemas:
+    AuthCodeRequest:
+      type: object
+      properties:
+        phone:
+          description: Номер телефона для отправки смс
+          type: string
+          pattern: ^\8-\d{10}$
+          example: "8-9001234567"
+        required: 
+          - phone
+
+    AuthCodeResponse:
+      type: object
+      properties:
+        status: 
+          description: Статус ответа
+          type: integer
+          example: "200"
+        data:
+          $ref: "#/components/schemas/AuthSignedData"
+        addition:
+          $ref: "../common/errors.yaml#/components/schemas/CommonError"
+
+    AuthSignedData:
+      type: object
+      properties:
+        signedData:
+          description: Ключ пользователя
+          type: string
+          example: "YToxOntzOjExOiJwaG9uZU51bWJlciI7czoxMjoiKzc5OTk2MjM0MDA3Ijt9.30563323b58a75d868069f347bd496db52b6c1af3199aacc491626c7bb99a342"
+      required:
+        - signedData
+
+    AuthCodeVerifyRequest:
+      type: object
+      properties:
+        signedData:
+          description: Ключ пользователя
+          type: string
+          example: "YToxOntzOjExOiJwaG9uZU51bWJlciI7czoxMjoiKzc5OTk2MjM0MDA3Ijt9.30563323b58a75d868069f347bd496db52b6c1af3199aacc491626c7bb99a342"
+        code:
+          description: Код из смс
+          type: integer
+          pattern: ^\d{6,6}$
+          example: "123123"
+      required: 
+        - signedData
+        - code
+    
+    AuthCodeVerifyResponse:
+      type: object
+      properties:
+        status: 
+          description: Статус ответа
+          type: integer
+          example: "200"
+        data:
+          $ref: "#/components/schemas/UserInfo"
+          
+    UserInfo:
+      type: object
+      properties:
+        id:
+          description: id пользователя
+          type: integer
+          example: "813108"
+        phone:
+          description: Номер пользователя
+          type: string
+          example: "8-9996234007"
+        phoneConfirmed:
+          description: Номер подтвержден
+          type: boolean
+          example: true
+        city:
+          description: Город -> уточнить!
+          type: string
+          example: "Санкт-Петербург"
+        loyalty:
+          $ref: "#/components/schemas/LoyaltyInfo"
+        wishlist: 
+          $ref: "#/components/schemas/WishlistInfo"
+        isAgreementAccepted:
+          description: Согласие с Пользовательским и Условиями
+          type: boolean
+          example: true
+        addition:
+          $ref: "../common/errors.yaml#/components/schemas/CommonError"
+          
+    LoyaltyInfo:
+      type: object
+      properties:    
+        isBlocked:
+          type: boolean
+          example: true
+    
+    WishlistInfo: |
+      type: object
+      properties:    
+        products:
+          type: array
+          $ref: "#/components/schemas/WishlistProducts"
+        elements:
+          type: array
+          $ref: "#/components/schemas/WishlistElements"
+        addition:
+          $ref: "../common/errors.yaml#/components/schemas/CommonError"
