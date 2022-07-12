@@ -1,4 +1,4 @@
-# {Trainee-kitchen}-swagger
+# love-republic-swagger
 
 ## Правила работы со спецификацией:
 
